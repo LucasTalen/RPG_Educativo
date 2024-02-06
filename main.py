@@ -147,7 +147,7 @@ def animar_texto(texto):
     for i in texto:
         print(i, end="")
         sys.stdout.flush()
-        sleep(.03)
+        #sleep(.03)
         
 def abrir_editor(editor,arquivo):
     subprocess.run([editor,arquivo])
@@ -161,12 +161,16 @@ def ler_arquivo_de_desafio(nome_do_desafio):
 def executar_desafio(nome_do_desafio): 
     return subprocess.run(['python', f'desafios/{nome_do_desafio}'],capture_output=True, text=True)
 
-def verificar_resultado_do_desafio(resultado):
+def verificar_resultado_do_desafio(resultado,saida_esperada):
+    print("---")
+    print(resultado)
     match resultado.returncode:
         case 0:
-            print("rodou o codigo normalmente")
             #O codigo foi executado corretamente. Agora tem que verificar se a saida é o resultado esperado do desafio.
-            
+            print("def--" + resultado.stdout == saida_esperada)
+            if resultado.stdout == saida_esperada:
+                return True
+            return False
         case 1:
             print("O codigo não rodou") 
             #O codigo não foi executado por erro do codigo 
@@ -174,7 +178,7 @@ def verificar_resultado_do_desafio(resultado):
         case _:
             ...
             #Erros inesperados
-            
+    return False
 
 print(rosto_Jim)
 
@@ -501,5 +505,23 @@ if not passou_na_prova:
 else:
     animar_texto(texto_passou_na_prova)
     input("\nPressione ENTER quando estiver pronto para começar.")
+    abrir_editor('notepad.exe' ,'desafios/laco_de_repeticao/desafio_laco_de_repeticao02.py')
+    codigo_do_desafio = ler_arquivo_de_desafio('laco_de_repeticao/desafio_laco_de_repeticao02.py')
+    resultado_do_desafio = executar_desafio('laco_de_repeticao/desafio_laco_de_repeticao02.py')
+    passou_no_desafio = verificar_resultado_do_desafio(resultado_do_desafio,"O Nome ana esta no Array\n")#True or False
+    print(passou_no_desafio)
+    if passou_no_desafio:
+        animar_texto("""
+Haha, então parece que você não é apenas um sortudo que passou na prova por mero acaso. 
+Você é realmente digno de estar nesta guilda dos codificadores. Parabéns por sobreviver à seleção, 
+meu mais novo recruta, haha. Agora vá descansar, porque amanhã vamos descobrir o que a 'Bug Mancer' preparou para nós. 
+Espero que não seja nada que deixe seu coração mais gelado do que o código mal escrito de um estagiário!
 
-#Fim do Ato 0 - Introdução"
+Fim do Ato 0 - Introdução""")
+    else:
+        animar_texto("""
+Hum, então você realmente foi um ratinho sortudo que passou na prova por mero acaso e não conseguiu resolver um simples código. 
+Parece que alguém esqueceu de atualizar o cérebro antes de vir. Não volte aqui até conseguir decifrar um algoritmo decente 
+ou até sua mãe permitir que você jogue no porão de novo. A propósito, eu já pedi para o capanga preparar uma gaiola bem confortável 
+para você. Acho que vai precisar."""
+)
