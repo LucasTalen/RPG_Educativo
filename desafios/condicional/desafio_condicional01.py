@@ -1,6 +1,6 @@
 nome = 'joão'
 
-if not nome == 'zé':
+if nome == 'zé':
     print(f'ola ze')
 else:
     print(f'ola {nome}')
